@@ -933,6 +933,7 @@ class Markdownify {
   function unstack() {
     if (!isset($this->stack[$this->parser->tagName]) || !is_array($this->stack[$this->parser->tagName])) {
       //trigger_error('Trying to unstack from empty stack. This must not happen.', E_USER_ERROR);
+      return; //see if it continues?
     }
     return array_pop($this->stack[$this->parser->tagName]);
   }
