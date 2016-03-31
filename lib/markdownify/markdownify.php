@@ -209,7 +209,7 @@ class Markdownify {
     'area',
     'object',
     'param',
-    'iframe',
+    // 'iframe',
   );
   /**
    * Markdown indents which could be wrapped
@@ -686,19 +686,27 @@ class Markdownify {
         #  [1]: mailto:mail@example.com Title
         $tag['href'] = 'mailto:'.$bufferDecoded;
       }
-      # [This link][id]
-      foreach ($this->stack['a'] as $tag2) {
-        if ($tag2['href'] == $tag['href'] && $tag2['title'] === $tag['title']) {
-          $tag['linkID'] = $tag2['linkID'];
-          break;
-        }
-      }
-      if (!isset($tag['linkID'])) {
-        $tag['linkID'] = count($this->stack['a']) + 1;
-        array_push($this->stack['a'], $tag);
-      }
 
-      $this->out('['.$buffer.']['.$tag['linkID'].']', true);
+      //inline
+      $inlineLinks = true;
+
+      if ($inlineLinks){
+        $this->out('['.$buffer.']('.$tag['href'].' "'.$tag['title'].'")', true);
+      } else {
+        # [This link][id]
+        foreach ($this->stack['a'] as $tag2) {
+          if ($tag2['href'] == $tag['href'] && $tag2['title'] === $tag['title']) {
+            $tag['linkID'] = $tag2['linkID'];
+            break;
+          }
+        }
+        if (!isset($tag['linkID'])) {
+          $tag['linkID'] = count($this->stack['a']) + 1;
+          array_push($this->stack['a'], $tag);
+        }
+
+        $this->out('['.$buffer.']['.$tag['linkID'].']', true);
+      }
     }
   }
   /**
