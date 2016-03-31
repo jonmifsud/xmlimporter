@@ -106,6 +106,12 @@ class Markdownify {
    */
   var $linksAfterEachParagraph = false;
   /**
+   * display links inline
+   *
+   * @var bool
+   */
+  var $linksInline = false;
+  /**
    * constructor, set options, setup parser
    *
    * @param bool $linksAfterEachParagraph wether or not to flush stacked links after each paragraph
@@ -687,10 +693,7 @@ class Markdownify {
         $tag['href'] = 'mailto:'.$bufferDecoded;
       }
 
-      //inline
-      $inlineLinks = true;
-
-      if ($inlineLinks){
+      if ($this->linksInline){
         $this->out('['.$buffer.']('.$tag['href'].' "'.$tag['title'].'")', true);
       } else {
         # [This link][id]
